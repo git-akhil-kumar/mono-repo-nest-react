@@ -1,0 +1,6 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['compose', '-f', 'docker-compose.yml', 'build']
+images:
+  - 'gcr.io/$GCP_PROJECT_ID/backend'
+  - 'gcr.io/$GCP_PROJECT_ID/frontend'

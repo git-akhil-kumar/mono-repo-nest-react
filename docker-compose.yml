@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   redis:
@@ -6,6 +6,8 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+    volumes:
+      - redis_data:/data
     restart: always
 
   postgres:
@@ -17,13 +19,17 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     restart: always
 
   backend:
-    build: ./backend
     container_name: backend
+    build:
+      context: ./backend
+    image: ${BACKEND_REGISTRY_URL}
     ports:
-      - "3000:3000"
+      - "4000:4000"
     environment:
       NODE_ENV: production
       REDIS_HOST: redis
@@ -39,8 +45,22 @@ services:
       - postgres
 
   frontend:
-    build: ./frontend
     container_name: frontend
+    build:
+      context: ./frontend
+    image: ${FRONTEND_REGISTRY_URL}
     ports:
       - "8080:3000"
     restart: always
+    depends_on:
+      - backend
+
+volumes:
+  redis_data:
+    driver: local
+  postgres_data:
+    driver: local
+
+networks:
+  mono-repo-networks:
+    driver: bridge
