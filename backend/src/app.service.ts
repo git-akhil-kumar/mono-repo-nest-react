@@ -28,36 +28,16 @@ export class AppService {
     'Kumar',
     'Singh',
   ];
-  constructor(@InjectConnection() private readonly connection: Connection) {}
 
   getHello(): string {
     return 'Hello World!';
   }
 
-  async update() {
-    const data = await this.connection.query(
-      `CREATE UNIQUE INDEX ON users (name);`,
-    );
-    return { data };
-  }
+  async update() {}
 
-  async create() {
-    const newRandomName = this.generateRandomName();
-    const data = await this.connection.query(
-      `INSERT INTO users (name) VALUES ($1);`,
-      [newRandomName],
-    );
-    return { data };
-  }
+  async create() {}
 
-  getAllUsers(): Promise<any[]> {
-    const LIMIT = 10;
-    const OFFSET = 0;
-    return this.connection.query(`select * from users LIMIT $1 OFFSET $2;`, [
-      LIMIT,
-      OFFSET,
-    ]);
-  }
+  getAllUsers() {}
 
   generateRandomName() {
     const randomFirstName =
