@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { DatabaseMongoModule } from '@app/common';
 import {
   BigArrayDocument,
+  BigArrayRepository,
   BigArraySchema,
 } from '@app/common/database-mongo/models/bigArray';
 
@@ -15,6 +16,6 @@ import {
     ]),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, BigArrayRepository],
 })
 export class AppModule {}

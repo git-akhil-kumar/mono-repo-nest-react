@@ -3,9 +3,11 @@ import {
   FilterQuery,
   Model,
   PipelineStage,
+  Types,
   UpdateQuery,
 } from 'mongoose';
 import { AbstractDocument } from './abstract.schema';
+import { ObjectId } from 'typeorm';
 
 export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   constructor(protected readonly model: Model<TDocument>) {}
@@ -15,7 +17,10 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   }
 
   async insert(document: Omit<TDocument, '_id'>) {
-    const createDocument = new this.model(document);
+    const createDocument = new this.model({
+      ...document,
+      _id: new Types.ObjectId(),
+    });
 
     return (await createDocument.save()).toJSON();
   }

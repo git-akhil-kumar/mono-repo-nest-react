@@ -9,4 +9,9 @@ export class AppController {
   get() {
     return this.appService.get();
   }
+
+  @Post()
+  post() {
+    return this.appService.post();
+  }
 }
