@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
+import { ModelDefinition, MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '../config';
+import { BigArrayDocument, BigArrayRepository } from './models/bigArray';
 
 @Module({
   imports: [
@@ -14,4 +15,8 @@ import { ConfigModule } from '../config';
     }),
   ],
 })
-export class DatabaseMongoModule {}
+export class DatabaseMongoModule {
+  static forFeature(models: ModelDefinition[]) {
+    return MongooseModule.forFeature(models);
+  }
+}

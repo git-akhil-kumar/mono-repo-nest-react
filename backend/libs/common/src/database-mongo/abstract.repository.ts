@@ -1,10 +1,20 @@
-import { FilterQuery, Model, UpdateQuery } from 'mongoose';
+import {
+  AggregateOptions,
+  FilterQuery,
+  Model,
+  PipelineStage,
+  UpdateQuery,
+} from 'mongoose';
 import { AbstractDocument } from './abstract.schema';
 
 export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   constructor(protected readonly model: Model<TDocument>) {}
 
-  async insert(document: TDocument) {
+  async exists(filterQuery: FilterQuery<TDocument>) {
+    return this.model.exists(filterQuery);
+  }
+
+  async insert(document: Omit<TDocument, '_id'>) {
     const createDocument = new this.model(document);
 
     return (await createDocument.save()).toJSON();
@@ -42,5 +52,13 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     updateQuery: UpdateQuery<TDocument>,
   ) {
     return this.model.updateMany(filterQuery, updateQuery);
+  }
+
+  async aggregate(pipeline: PipelineStage[], options: AggregateOptions) {
+    return this.model.aggregate(pipeline, options);
+  }
+
+  async countDocuments(filterQuery: FilterQuery<TDocument>) {
+    return this.model.countDocuments(filterQuery);
   }
 }
