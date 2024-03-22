@@ -51,7 +51,7 @@ services:
     restart: always
     depends_on:
       - redis
-      - postgres
+      - mongodb
 
   frontend:
     container_name: frontend
@@ -61,6 +61,15 @@ services:
     ports:
       - "8080:3000"
     restart: always
+    depends_on:
+      - backend
+
+  load-test:
+    build: "./load-test"
+    environment:
+      - API_ENDPOINT=http://localhost:4000
+    ports:
+      - "10000:8080"
     depends_on:
       - backend
 
