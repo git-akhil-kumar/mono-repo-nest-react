@@ -1,6 +1,7 @@
 version: "3.8"
 
 services:
+
   mongodb:
     image: mongo
     container_name: mongodb
@@ -32,6 +33,18 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: always
 
+  cassandra:
+    image: cassandra
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_USERNAME=${CASSANDRA_USERNAME}
+      - CASSANDRA_PASSWORD=${CASSANDRA_PASSWORD}
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+    restart: always
+
   backend:
     container_name: backend
     build:
@@ -52,6 +65,7 @@ services:
     depends_on:
       - redis
       - mongodb
+      - cassandra
 
   frontend:
     container_name: frontend
@@ -79,6 +93,8 @@ volumes:
   postgres_data:
     driver: local
   mongodb_data:
+    driver: local
+  cassandra_data:
     driver: local
 
 networks:
