@@ -1,4 +1,3 @@
-version: "3.8"
 
 services:
 
@@ -48,7 +47,7 @@ services:
   backend:
     container_name: backend
     build:
-      context: ./backend
+      context: ./backend-nestjs
     image: ${BACKEND_REGISTRY_URL}
     ports:
       - "4000:4000"
